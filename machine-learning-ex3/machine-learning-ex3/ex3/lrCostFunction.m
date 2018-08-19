@@ -35,17 +35,19 @@ grad = zeros(size(theta));
 %           temp(1) = 0;   % because we don't add anything for j = 0  
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
+function g= g_sigmoid(z)
+    g=zeros(size(z));
+    g=1./(1+exp(-(z)));
+end
+z=X*theta;
+h=g_sigmoid(z);
 
+theta_reg=theta;
+theta_reg(1)=0;
+J=((1/m)*sum( (-y'*log(h)) - ((1-y)'*log(1-h)) )) + (lambda/(2*m))*sum((theta_reg).^2);
 
+grad=((1/m)*(X'*(h-y)))+ ((lambda/m)*theta_reg);
 
-
-
-
-
-
-
-
-% =============================================================
 
 grad = grad(:);
 
