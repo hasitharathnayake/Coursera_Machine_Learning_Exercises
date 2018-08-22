@@ -8,32 +8,27 @@ function [all_theta] = oneVsAll(X, y, num_labels, lambda)
 %   to the classifier for label i
 
 % Some useful variables
-m = size(X, 1);
-n = size(X, 2);
+m = size(X, 1);%#of rows
+n = size(X, 2);%#of columns
 
 % You need to return the following variables correctly 
 all_theta = zeros(num_labels, n + 1);
 
 % Add ones to the X data matrix
-X = [ones(m, 1) X];
+X = [ones(m, 1) X]; %add m by 1 vector of "1"s to matrix X
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the following code to train num_labels
 %               logistic regression classifiers with regularization
 %               parameter lambda. 
-%
 % Hint: theta(:) will return a column vector.
-%
 % Hint: You can use y == c to obtain a vector of 1's and 0's that tell you
 %       whether the ground truth is true/false for this class.
-%
 % Note: For this assignment, we recommend using fmincg to optimize the cost
 %       function. It is okay to use a for-loop (for c = 1:num_labels) to
 %       loop over the different classes.
-%
 %       fmincg works similarly to fminunc, but is more efficient when we
 %       are dealing with large number of parameters.
-%
 % Example Code for fmincg:
 %
 %     % Set Initial theta
@@ -45,13 +40,20 @@ X = [ones(m, 1) X];
 %     % Run fmincg to obtain the optimal theta
 %     % This function will return theta and the cost 
 %     [theta] = ...
-%         fmincg (@(t)(lrCostFunction(t, X, (y == c), lambda)), ...
+%         fmincg (@(t)( lrCostFunction (t, X, (y == c), lambda)), ...
 %                 initial_theta, options);
 %
+initial_theta=zeros(n+1,1);
+options=optimset('GradObj','on','MaxIter',50);
+for c=1:num_labels %this makes sure we can have as many number of features as we need
+    % for loop will make sure we cycle through all the rows from 1:k (or c
+    % in this case) of initial_theta matrix
+[all_theta(c,:)]=fmincg(@(t)(lrCostFunction(t,X,(y==c),lambda)),initial_theta,options);
+%the all_theta(c,:) will select 1 col of all_theta on row c and then store resulting vector from fmincg on it
 
+end
 
-
-
+end
 
 
 
@@ -63,4 +65,4 @@ X = [ones(m, 1) X];
 % =========================================================================
 
 
-end
+
